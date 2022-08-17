@@ -1,2 +1,2 @@
 # Amo
-🎳 cli tool for creating react apps
+🎳 cli tool for creating apps
