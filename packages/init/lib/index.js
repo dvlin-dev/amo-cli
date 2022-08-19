@@ -1,7 +1,9 @@
 'use strict';
 
-module.exports = init;
+const { log } = require('@amo-cli/utils');
 
-function init() {
-  // TODO
+function init(options) {
+  log.verbose('init', options);
 }
+
+module.exports = init;

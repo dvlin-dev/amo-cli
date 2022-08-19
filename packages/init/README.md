@@ -1,11 +1,11 @@
-# `@baolin/init`
+# `@amo-cli/init`
 
 > TODO: description
 
 ## Usage
 
 ```
-const init = require('@baolin/init');
+const init = require('@amo-cli/init');
 
 // TODO: DEMONSTRATE API
 ```

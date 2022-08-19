@@ -1,4 +1,3 @@
-'use strict';
 const fs = require('fs');
 const path = require('path');
 const fse = require('fs-extra');
@@ -30,18 +29,11 @@ function registerCommand() {
   program
     .command('init [type]')
     .description('项目初始化')
-    .action(async () => {
-      try {
-        const initPackage = new Package({
-          ...config,
-          packageDir: DEPENDENCIES_PATH,
-          packageName: 'npminstall',
-          packageVersion: '6.5.0',
-        });
-        await initPackage.install();
-      } catch (e) {
-        log.error(e.message);
-      }
+    .option('--packagePath <packagePath>', '手动指定init包路径')
+    .action(async (type, { packagePath }) => {
+      const packageName = '@amo-cli/init';
+      const packageVersion = '1.0.0';
+      await execCommand({ packagePath, packageName, packageVersion }, { type });
     });
 
   program
@@ -74,6 +66,71 @@ function registerCommand() {
   }
 }
 
+async function execCommand({ packagePath, packageName, packageVersion }, extraOptions) {
+  let rootFile;
+  try {
+    if (packagePath) {
+      const execPackage = new Package({
+        targetPath: packagePath,
+        storePath: packagePath,
+        name: packageName,
+        version: packageVersion,
+      });
+      rootFile = execPackage.getRootFilePath(true);
+    } else {
+      const { cliHome } = config;
+      const packageDir = `${DEPENDENCIES_PATH}`;
+      const targetPath = path.resolve(cliHome, packageDir);
+      const storePath = path.resolve(targetPath, 'node_modules');
+      const initPackage = new Package({
+        targetPath,
+        storePath,
+        name: packageName,
+        version: packageVersion,
+      });
+      if (initPackage.exists()) {
+        await initPackage.update();
+      } else {
+        await initPackage.install();
+      }
+      rootFile = initPackage.getRootFilePath();
+    }
+    const _config = Object.assign({}, config, extraOptions);
+    if (fs.existsSync(rootFile)) {
+      const code = `require('${rootFile}')(${JSON.stringify(_config)})`;
+      const p = exec('node', ['-e', code], { stdio: 'inherit' });
+      p.on('error', e => {
+        log.verbose('spawn error', e);
+        handleError(e);
+        process.exit(1);
+      });
+      p.on('exit', c => {
+        log.verbose('spawn exit', c);
+        process.exit(c);
+      });
+    } else {
+      throw new Error('入口文件不存在，请重试！');
+    }
+  } catch (e) {
+    log.error(e.message);
+  }
+}
+
+function handleError(e) {
+  log.error('Error', e.message);
+  log.error('stack', e.stack);
+  process.exit(1);
+}
+
+function exec(command, args, options) {
+  const win32 = process.platform === 'win32';
+
+  const cmd = win32 ? 'cmd' : command;
+  const cmdArgs = win32 ? ['/c'].concat(command, args) : args;
+
+  return require('child_process').spawn(cmd, cmdArgs, options || {});
+}
+
 function cleanAll() {
   if (fs.existsSync(config.cliHome)) {
     fse.emptyDirSync(config.cliHome);
@@ -90,11 +147,11 @@ async function prepare() {
   checkUserHome(); // 检查用户主目录
   checkInputArgs(); // 检查用户输入参数
   checkEnv(); // 检查环境变量
-  // await checkGlobalUpdate(); // 检查工具是否需要更新
+  await checkGlobalUpdate(); // 检查工具是否需要更新
 }
 
 async function checkGlobalUpdate() {
-  log.verbose('检查 Amo-cli 最新版本');
+  log.verbose('检查 imooc-cli 最新版本');
   const lastVersion = await npm.getNpmLatestSemverVersion(NPM_NAME, packageConfig.version);
   if (lastVersion) {
     log.warn(
@@ -157,7 +214,7 @@ function checkRoot() {
 function checkNodeVersion() {
   const semver = require('semver');
   if (!semver.gte(process.version, LOWEST_NODE_VERSION)) {
-    throw new Error(colors.red(`amo-cli 需要安装 v${LOWEST_NODE_VERSION} 以上版本的 Node.js`));
+    throw new Error(colors.red(`Amo-cli 需要安装 v${LOWEST_NODE_VERSION} 以上版本的 Node.js`));
   }
 }
 
