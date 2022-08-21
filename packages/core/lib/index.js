@@ -34,7 +34,7 @@ function registerCommand() {
     .option('--force', '覆盖当前路径文件（谨慎使用）')
     .action(async (type, { packagePath, force }) => {
       const packageName = '@amo-cli/init';
-      const packageVersion = '^1.0.0';
+      const packageVersion = '1.0.1';
       await execCommand({ packagePath, packageName, packageVersion }, { type, force });
     });
 
