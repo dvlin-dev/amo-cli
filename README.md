@@ -2,14 +2,14 @@
 
 🎳 cli tool for creating apps
 
-# start
+# Start
 
 ```bash
 npm install -g @amo-cli/core
 
 ```
 
-# create project
+# Create project
 
 Init
 
@@ -23,7 +23,7 @@ Force empty current directory
 amo init --force
 ```
 
-# other
+# Other API
 
 clear cache
 
@@ -36,3 +36,5 @@ debug
 ```bash
 amo --debug
 ```
+
+> If you want to add your template, please write your warehouse address in pr
