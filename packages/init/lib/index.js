@@ -33,7 +33,7 @@ async function init(options) {
 
 async function npminstall(targetPath) {
   return new Promise((resolve, reject) => {
-    const p = exec('cnpm', ['install'], { stdio: 'inherit', cwd: targetPath });
+    const p = exec('npm', ['install'], { stdio: 'inherit', cwd: targetPath });
     p.on('error', e => {
       reject(e);
     });
