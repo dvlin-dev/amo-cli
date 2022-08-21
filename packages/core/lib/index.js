@@ -4,7 +4,8 @@ const fse = require('fs-extra');
 const program = require('commander');
 const colors = require('colors/safe');
 const userHome = require('user-home');
-const { log, npm, Package } = require('@amo-cli/utils');
+const semver = require('semver');
+const { log, npm, Package, exec } = require('@amo-cli/utils');
 const packageConfig = require('../package');
 
 const { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME, NPM_NAME, DEPENDENCIES_PATH } = require('./const');
@@ -30,10 +31,11 @@ function registerCommand() {
     .command('init [type]')
     .description('项目初始化')
     .option('--packagePath <packagePath>', '手动指定init包路径')
-    .action(async (type, { packagePath }) => {
+    .option('--force', '覆盖当前路径文件（谨慎使用）')
+    .action(async (type, { packagePath, force }) => {
       const packageName = '@amo-cli/init';
       const packageVersion = '1.0.0';
-      await execCommand({ packagePath, packageName, packageVersion }, { type });
+      await execCommand({ packagePath, packageName, packageVersion }, { type, force });
     });
 
   program
@@ -88,7 +90,7 @@ async function execCommand({ packagePath, packageName, packageVersion }, extraOp
         name: packageName,
         version: packageVersion,
       });
-      if (initPackage.exists()) {
+      if (await initPackage.exists()) {
         await initPackage.update();
       } else {
         await initPackage.install();
@@ -100,12 +102,12 @@ async function execCommand({ packagePath, packageName, packageVersion }, extraOp
       const code = `require('${rootFile}')(${JSON.stringify(_config)})`;
       const p = exec('node', ['-e', code], { stdio: 'inherit' });
       p.on('error', e => {
-        log.verbose('spawn error', e);
+        log.verbose('命令执行失败：', e);
         handleError(e);
         process.exit(1);
       });
       p.on('exit', c => {
-        log.verbose('spawn exit', c);
+        log.verbose('命令执行成功', c);
         process.exit(c);
       });
     } else {
@@ -120,15 +122,6 @@ function handleError(e) {
   log.error('Error', e.message);
   log.error('stack', e.stack);
   process.exit(1);
-}
-
-function exec(command, args, options) {
-  const win32 = process.platform === 'win32';
-
-  const cmd = win32 ? 'cmd' : command;
-  const cmdArgs = win32 ? ['/c'].concat(command, args) : args;
-
-  return require('child_process').spawn(cmd, cmdArgs, options || {});
 }
 
 function cleanAll() {
@@ -151,9 +144,10 @@ async function prepare() {
 }
 
 async function checkGlobalUpdate() {
-  log.verbose('检查 imooc-cli 最新版本');
-  const lastVersion = await npm.getNpmLatestSemverVersion(NPM_NAME, packageConfig.version);
-  if (lastVersion) {
+  log.verbose('检查 amo-cli 最新版本');
+  const currentVersion = packageConfig.version;
+  const lastVersion = await npm.getNpmLatestSemverVersion(NPM_NAME, currentVersion);
+  if (semver.gt(lastVersion, currentVersion)) {
     log.warn(
       colors.yellow(`请手动更新 ${NPM_NAME}，当前版本：${packageConfig.version}，最新版本：${lastVersion}
                 更新命令： npm install -g ${NPM_NAME}`),

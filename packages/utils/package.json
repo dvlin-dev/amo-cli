@@ -1,6 +1,6 @@
 {
   "name": "@amo-cli/utils",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1",
   "description": "> TODO: description",
   "author": "zhangbaolin <zhangbaolin.work@foxmail.com>",
   "homepage": "https://github.com/bowlingQ/amo-cli#readme",
@@ -25,5 +25,18 @@
   },
   "bugs": {
     "url": "https://github.com/bowlingQ/amo-cli/issues"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cli-spinner": "^0.2.10",
+    "fs-extra": "^10.1.0",
+    "inquirer": "^6.1.0",
+    "npminstall": "^6.5.0",
+    "npmlog": "^6.0.2",
+    "semver": "^7.3.7",
+    "url-join": "^4.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0"
   }
 }

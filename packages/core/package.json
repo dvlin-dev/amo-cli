@@ -31,5 +31,20 @@
   },
   "bugs": {
     "url": "https://github.com/bowlingQ/amo-cli/issues"
+  },
+  "dependencies": {
+    "@amo-cli/utils": "file:../../utils",
+    "colors": "^1.4.0",
+    "commander": "^9.4.0",
+    "dotenv": "^16.0.1",
+    "minimist": "^1.2.6",
+    "npm": "^8.18.0",
+    "npminstall": "^6.5.0",
+    "root-check": "^1.0.0",
+    "semver": "^7.3.7",
+    "user-home": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0"
   }
 }
