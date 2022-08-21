@@ -27,7 +27,7 @@
     "url": "https://github.com/bowlingQ/amo-cli/issues"
   },
   "dependencies": {
-    "@amo-cli/utils": "file:../../utils"
+    "@amo-cli/utils": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "^10.0.0"
