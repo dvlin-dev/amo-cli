@@ -33,7 +33,7 @@
     "url": "https://github.com/bowlingQ/amo-cli/issues"
   },
   "dependencies": {
-    "@amo-cli/utils": "^1.0.0",
+    "@amo-cli/utils": "^1.0.2",
     "colors": "^1.4.0",
     "commander": "^9.4.0",
     "dotenv": "^16.0.1",
