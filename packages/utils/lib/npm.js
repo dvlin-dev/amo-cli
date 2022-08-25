@@ -4,7 +4,7 @@ const urlJoin = require('url-join');
 const semver = require('semver');
 
 // 获取 registry 信息
-function getNpmRegistry(isOriginal = false) {
+function getNpmRegistry(isOriginal = true) {
   return isOriginal ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org';
 }
 
