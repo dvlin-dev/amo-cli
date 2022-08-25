@@ -1,6 +1,6 @@
 {
   "name": "@amo-cli/core",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "amo-cli core",
   "keywords": [
     "cli"
@@ -33,7 +33,7 @@
     "url": "https://github.com/bowlingQ/amo-cli/issues"
   },
   "dependencies": {
-    "@amo-cli/utils": "^1.0.2",
+    "@amo-cli/utils": "^1.1.1",
     "colors": "^1.4.0",
     "commander": "^9.4.0",
     "dotenv": "^16.0.1",
