@@ -36,7 +36,7 @@ async function npminstall(targetPath) {
     const p = exec('npm', ['install'], { stdio: 'inherit', cwd: targetPath });
     p.on('error', e => {
       reject(e);
-      log.info('如果是 cnpm 报的错，请安装 cnpm')
+      log.notice('如果是 cnpm 报的错，请安装 cnpm')
     });
     p.on('exit', c => {
       resolve(c);
