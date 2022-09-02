@@ -17,6 +17,10 @@ currently available templates：
 ```bash
 npm install -g @amo-cli/core
 
+or
+
+yarn global add @amo-cli/core
+
 ```
 
 # Create project
