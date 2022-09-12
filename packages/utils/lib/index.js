@@ -5,6 +5,7 @@ const request = require('./request');
 const npm = require('./npm');
 const inquirer = require('./inquirer');
 const spinner = require('./spinner');
+const formatPath = require('./formatPath');
 
 const Package = require('./Package');
 
@@ -32,4 +33,5 @@ module.exports = {
   Package,
   sleep,
   exec,
+  formatPath,
 };
