@@ -1,3 +1,6 @@
+# Discarded
+ Move to [devlink](https://github.com/developerlinks/devlink)
+
 # Amo-cli
 
 🎳 cli tool for creating apps
